@@ -1,0 +1,6 @@
+streamlit
+psycopg2
+pandas
+scikit-learn
+nltk
+mlflow

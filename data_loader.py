@@ -2,7 +2,7 @@ import pandas as pd
 from preprocess import TextPreprocessor
 
 def load_and_preprocess_data():
-    
+    # Charger le dataset d'avis (exemple : IMDB dataset)
     df = pd.read_csv("https://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz", delimiter='\t')
     
     # Extraction des données et étiquettes
