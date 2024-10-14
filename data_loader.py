@@ -1,5 +1,3 @@
-# data_loader.py
-
 import pandas as pd
 from preprocess import TextPreprocessor
 
