@@ -4,3 +4,4 @@ pandas
 scikit-learn
 nltk
 mlflow
+flake8
