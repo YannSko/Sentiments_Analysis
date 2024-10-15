@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8501:8501"
+    environment:
+      - POSTGRES_HOST=db
+      - POSTGRES_DB=sentiment_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    depends_on:
+      - db
+    volumes:
+      - ./data:/app/data  # Volume pour les données
+
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: sentiment_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data  # Volume pour stocker les données PostgreSQL
+
+  mlflow:
+    image: mlflow:latest
+    ports:
+      - "5000:5000"  # Port pour accéder à MLflow UI
+    environment:
+      - MLFLOW_TRACKING_URI=postgresql://postgres:password@db:5432/mlflow_db  # Utilisation de PostgreSQL comme backend
+      - MLFLOW_ARTIFACT_ROOT=/mlflow/artifacts  # Stocker les artefacts localement
+    depends_on:
+      - db
+    volumes:
+      - ./mlflow:/mlflow/artifacts  # Volume pour les artefacts stockés localement (modèles, fichiers)
+    command: mlflow server --backend-store-uri postgresql://postgres:password@db:5432/mlflow_db --default-artifact-root /mlflow/artifacts --host 0.0.0.0 --port 5000
+
+volumes:
+  db_data:  # Volume pour les données PostgreSQL
+  mlflow:  # Volume pour stocker les artefacts MLflow
